@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Каталог — SocialSh Store</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;500&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+  <link rel="shortcut icon" href="/favicon/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-title" content="socialsh " />
+  <link rel="manifest" href="/favicon/site.webmanifest" />
+</head>
+<body>
+  <div id="toast" class="toast"></div>
+  <header>
+    <h1>SocialSh Store</h1>
+    <nav>
+      <a href="index.html">Главная</a>
+      <a href="catalog.html">Весь ассортимент</a>
+      <a href="about.html">О нас</a>
+      <a href="cart.html" title="Корзина">
+        <svg class="cart-icon" viewBox="0 0 32 32" width="30" height="30" fill="none" stroke="#181818" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="28" r="2"/><circle cx="24" cy="28" r="2"/><path d="M4 6h2l3.6 14.59A2 2 0 0 0 11.5 22h11a2 2 0 0 0 1.9-1.41L28 8H6"/></svg>
+      </a>
+    </nav>
+  </header>
+  <main>
+    <div class="page-content">
+      <aside class="sidebar">
+        <form id="search-form" style="display:flex;flex-direction:column;gap:1.2rem;">
+          <input type="text" id="search-input" placeholder="Поиск по названию..." style="padding:0.7rem 1rem;border-radius:0.5rem;border:1px solid #ddd;" />
+          <input type="number" id="min-price" placeholder="Цена от" style="padding:0.7rem 1rem;border-radius:0.5rem;border:1px solid #ddd;" />
+          <input type="number" id="max-price" placeholder="Цена до" style="padding:0.7rem 1rem;border-radius:0.5rem;border:1px solid #ddd;" />
+          <div id="size-filter" style="display:flex;flex-wrap:wrap;gap:0.7rem 1.2rem;align-items:center;font-size:1.01rem;"></div>
+          <select id="sort-select" style="padding:0.7rem 1rem;border-radius:0.5rem;border:1px solid #ddd;">
+            <option value="default">Сортировка</option>
+            <option value="price-asc">Сначала дешёвые</option>
+            <option value="price-desc">Сначала дорогие</option>
+            <option value="new">Новинки</option>
+          </select>
+          <button type="submit" style="padding:0.7rem 1.5rem;border-radius:0.5rem;border:none;background:#181818;color:#fff;font-weight:600;">Найти</button>
+        </form>
+      </aside>
+      <section class="catalog catalog-centered" id="catalog-list">
+        <!-- Карточки товаров рендерятся через JS -->
+      </section>
+    </div>
+  </main>
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-logo">SocialSh Store</div>
+      <div class="footer-links">
+        <a href="index.html">Главная</a>
+        <a href="about.html">О нас</a>
+        <a href="catalog.html">Весь ассортимент</a>
+        <a href="https://t.me/Ilyushechka_vey" style="font-weight:700;text-decoration:underline;">@Ilyushechka_vey</a>
+      </div>
+      <div class="footer-policy">
+        <a href="privacy.html">Политика конфиденциальности</a><br>
+        <a href="terms.html">Условия использования</a>
+      </div>
+    </div>
+  </footer>
+  <script src="main.js"></script>
+  <script>
+    fetch('/api/products').then(r=>r.json()).then(products=>{
+      const catalog = document.getElementById('catalog-list');
+      if (!catalog) return;
+      catalog.innerHTML = products.map(product => {
+        const sizes = product.sizes || [];
+        return `<div class="product-card" style="background:#fff;box-shadow:0 4px 24px #0001;max-width:370px;min-width:240px;display:flex;flex-direction:column;align-items:center;padding:2.2rem 1.5rem 2.5rem 1.5rem;margin:0 auto;">
+          <div style="width:100%;display:flex;justify-content:center;align-items:center;">
+            <img src="img/${product.image}" alt="${product.name}" style="width:210px;height:210px;object-fit:cover;border-radius:1rem;background:#fff;box-shadow:0 2px 12px #0001;" />
+          </div>
+          <h2 style="font-size:1.18rem;font-family:'Montserrat',sans-serif;color:#181818;margin:1.2rem 0 0.2rem 0;text-align:center;font-weight:700;">${product.name}</h2>
+          <div style="margin:0.7rem 0 0.7rem 0;text-align:center;">
+            <span class="price" style="font-size:1.25rem;font-weight:700;color:#181818;">${product.price.toLocaleString()} ₽</span>
+          </div>
+          <div style="margin-bottom:1.2rem;color:#444;font-size:1.05rem;line-height:1.5;text-align:center;">${product.description}</div>
+          <div style="margin:0.7rem 0 1.2rem 0;width:100%;text-align:center;">
+            <b>Размер:</b>
+            <select class="size-select" data-id="${product.id}" style="padding:0.5rem 1.2rem;border-radius:0.5rem;border:1.5px solid #bbb;font-size:1.1rem;margin-left:0.5rem;background:#f7f7f7;">
+              ${sizes.map(s => `<option value="${s}">${s}</option>`).join('')}
+            </select>
+          </div>
+          <button class="add-to-cart-btn" data-id="${product.id}" style="margin-top:auto;width:100%;padding:0.9rem 0;font-size:1.08rem;font-family:'Montserrat',sans-serif;font-weight:700;background:#181818;color:#fff;border-radius:0.7rem;">В корзину</button>
+        </div>`;
+      }).join('');
+      document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+        btn.onclick = function() {
+          const id = this.getAttribute('data-id');
+          const product = products.find(p => String(p.id) === String(id));
+          const size = document.querySelector(`.size-select[data-id="${id}"]`).value;
+          if (!size) return alert('Выберите размер!');
+          if (!product) return;
+          window.addToCart && window.addToCart({ id: product.id, name: product.name, price: product.price, image: product.image, size });
+          showToast('Товар добавлен в корзину!');
+        };
+      });
+    });
+  </script>
+</body>
+</html> 
