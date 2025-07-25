@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Товар — SocialSh Store</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;500&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+  <link rel="shortcut icon" href="/favicon/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-title" content="socialsh " />
+  <link rel="manifest" href="/favicon/site.webmanifest" />
+</head>
+<body>
+  <div id="toast" class="toast"></div>
+  <header>
+    <h1>SocialSh Store</h1>
+    <nav>
+      <a href="index.html">Главная</a>
+      <a href="catalog.html">Весь ассортимент</a>
+      <a href="about.html">О нас</a>
+      <a href="cart.html" title="Корзина">
+        <svg class="cart-icon" viewBox="0 0 32 32" width="30" height="30" fill="none" stroke="#181818" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="28" r="2"/><circle cx="24" cy="28" r="2"/><path d="M4 6h2l3.6 14.59A2 2 0 0 0 11.5 22h11a2 2 0 0 0 1.9-1.41L28 8H6"/></svg>
+      </a>
+    </nav>
+  </header>
+  <main>
+    <section class="product-detail-flex" style="max-width:950px;margin:3.5rem auto 4rem auto;padding:2.5rem 2rem 2.5rem 2rem;border-radius:1.2rem;box-shadow:0 4px 32px #000a;display:flex;gap:2.5rem;align-items:flex-start;">
+        <div class="product-img-col" style="flex:1;display:flex;flex-direction:column;align-items:center;">
+          <img id="product-img" src="" alt="" style="width:340px;height:340px;object-fit:cover;border-radius:1.2rem;background:#fff;box-shadow:0 2px 12px #0001;" />
+          <div id="product-thumbs" style="display:flex;gap:0.7rem;justify-content:center;margin-top:1.2rem;"></div>
+        </div>
+        <div class="product-info-col" style="flex:1.3;display:flex;flex-direction:column;gap:1.2rem;">
+          <h2 id="product-title" style="font-size:1.45rem;font-family:'Montserrat',sans-serif;color:#181818;margin:0 0 0.5rem 0;font-weight:700;"></h2>
+          <div style="display:flex;align-items:center;gap:1.2rem;">
+            <span id="product-price" style="font-size:1.35rem;font-weight:700;color:#e53935;"></span>
+            <span id="product-old-price" style="font-size:1.1rem;color:#888;text-decoration:line-through;margin-left:0.5rem;"></span>
+          </div>
+          <div id="product-composition" style="color:#444;font-size:1.08rem;line-height:1.5;"></div>
+          <div id="product-color" style="color:#444;font-size:1.08rem;line-height:1.5;"></div>
+          <div style="margin:0.7rem 0 1.2rem 0;width:100%;text-align:left;">
+            <b>Размер:</b>
+            <select id="size-select" style="padding:0.5rem 1.2rem;border-radius:0.5rem;border:1.5px solid #bbb;font-size:1.1rem;margin-left:0.5rem;background:#f7f7f7;">
+            </select>
+          </div>
+          <button id="add-to-cart" style="width:100%;padding:1rem 0;font-size:1.08rem;font-family:'Montserrat',sans-serif;font-weight:700;background:#181818;color:#fff;border-radius:0.7rem;margin-bottom:1.2rem;">В корзину</button>
+          <div id="product-desc" style="margin-bottom:1.2rem;color:#444;font-size:1.05rem;line-height:1.5;"></div>
+          <div style="margin:1.5rem 0 0.5rem 0;display:flex;align-items:center;gap:1.5rem;color:#888;font-size:1.02rem;">
+            <span>↩️ 14 дней на возврат</span>
+            <span>👕 Есть примерка</span>
+          </div>
+          <section class="reviews" style="margin-top:2.5rem;">
+            <h3>Отзывы</h3>
+            <form id="review-form" style="margin-bottom:1.5rem;display:flex;flex-direction:column;gap:1rem;max-width:400px;">
+              <input type="text" name="author" placeholder="Ваше имя" required style="padding:0.6rem 1rem;border-radius:0.5rem;border:none;" />
+              <textarea name="text" placeholder="Ваш отзыв" required style="padding:0.6rem 1rem;border-radius:0.5rem;border:none;min-height:70px;"></textarea>
+              <button type="submit" style="align-self:flex-end;padding:0.6rem 1.5rem;border-radius:0.5rem;border:none;background:#00bfae;color:#fff;font-weight:600;">Оставить отзыв</button>
+            </form>
+            <div id="reviews-list"></div>
+          </section>
+        </div>
+      </div>
+    </section>
+    <script src="main.js"></script>
+    <script>
+      // Рендерим товар в стиле карточки с галереей
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('id');
+      if (id) {
+        fetch('/api/products').then(res=>res.json()).then(products=>{
+          const product = products.find(p => String(p.id) === String(id));
+          if (!product) return;
+          let currentImg = 0;
+          const images = product.images || [product.image];
+          function showImg(idx) {
+            document.getElementById('product-img').src = 'img/' + images[idx];
+            document.getElementById('product-img').alt = product.name;
+            // Галерея миниатюр
+            document.getElementById('product-thumbs').innerHTML = images.map((img, i) =>
+              `<img src="img/${img}" alt="thumb" style="width:60px;height:60px;object-fit:cover;border-radius:0.5rem;cursor:pointer;box-shadow:0 1px 6px #0001;border:2.5px solid ${i===idx?'#181818':'#eee'};transition:border 0.2s;" data-idx="${i}">`
+            ).join('');
+            document.querySelectorAll('#product-thumbs img').forEach(thumb => {
+              thumb.onclick = () => { showImg(Number(thumb.dataset.idx)); };
+            });
+          }
+          showImg(0);
+          document.getElementById('product-title').textContent = product.name;
+          document.getElementById('product-price').textContent = product.price.toLocaleString() + ' ₽';
+          if (product.priceOld) {
+            document.getElementById('product-old-price').textContent = product.priceOld.toLocaleString() + ' ₽';
+          }
+          document.getElementById('product-composition').textContent = product.composition ? 'Состав: ' + product.composition : '';
+          document.getElementById('product-color').textContent = product.color ? 'Цвет: ' + product.color : '';
+          document.getElementById('product-desc').textContent = product.description;
+          const sizes = product.sizes || [];
+          document.getElementById('size-select').innerHTML = sizes.map(s => `<option value="${s}">${s}</option>`).join('');
+          document.getElementById('add-to-cart').onclick = () => {
+            const size = document.getElementById('size-select').value;
+            window.addToCart && window.addToCart({ id: product.id, name: product.name, price: product.price, image: images[currentImg], size });
+            showToast('Товар добавлен в корзину!');
+          };
+        });
+      }
+    </script>
+  </main>
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-logo">SocialSh Store</div>
+      <div class="footer-links">
+        <a href="index.html">Главная</a>
+        <a href="about.html">О нас</a>
+        <a href="catalog.html">Весь ассортимент</a>
+        <a href="https://t.me/Ilyushechka_vey" style="font-weight:700;text-decoration:underline;">@Ilyushechka_vey</a>
+      </div>
+      <div class="footer-policy">
+        <a href="privacy.html">Политика конфиденциальности</a><br>
+        <a href="terms.html">Условия использования</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html> 
