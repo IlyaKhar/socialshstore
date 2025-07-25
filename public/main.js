@@ -1,5 +1,8 @@
 // main.js — здесь будет логика магазина
 
+// === НАСТРОЙКА BACKEND URL ===
+const BASE_URL = 'https://icy-coats-unite.loca.lt';
+
 // --- КОРЗИНА ---
 const CART_KEY = 'shop_cart';
 const USER_KEY = 'shop_user';
