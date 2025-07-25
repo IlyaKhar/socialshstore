@@ -1,5 +1,8 @@
 // main.js — здесь будет логика магазина
 
+// === НАСТРОЙКА BACKEND URL ===
+const BASE_URL = 'https://icy-coats-unite.loca.lt';
+
 // --- КОРЗИНА ---
 const CART_KEY = 'shop_cart';
 const USER_KEY = 'shop_user';
@@ -92,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Главная страница — каталог
   if (document.querySelector('.catalog')) {
-    fetch('/api/products')
+    fetch(`${BASE_URL}/api/products`)
       .then(res => res.json())
       .then(products => {
         products = products.map(p => ({ ...p, id: p._id || p.id }));
@@ -136,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
       document.querySelector('.product-detail').innerHTML = '<h2>Товар не найден</h2>';
       return;
     }
-    fetch('/api/products')
+    fetch(`${BASE_URL}/api/products`)
       .then(res => res.json())
       .then(products => {
         products = products.map(p => ({ ...p, id: p._id || p.id }));
@@ -246,7 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
       form.querySelector('button[type="submit"]').disabled = true;
       result.textContent = 'Отправка заказа...';
       try {
-        const res = await fetch('/api/order', {
+        const res = await fetch(`${BASE_URL}/api/order`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(order),
@@ -304,7 +307,7 @@ document.addEventListener('DOMContentLoaded', () => {
       form.querySelector('button[type="submit"]').disabled = true;
       result.textContent = 'Регистрация...';
       try {
-        const res = await fetch('/api/register', {
+        const res = await fetch(`${BASE_URL}/api/register`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(user),
@@ -349,7 +352,7 @@ document.addEventListener('DOMContentLoaded', () => {
       form.querySelector('button[type="submit"]').disabled = true;
       result.textContent = 'Вход...';
       try {
-        const res = await fetch('/api/login', {
+        const res = await fetch(`${BASE_URL}/api/login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(user),
@@ -420,7 +423,7 @@ document.addEventListener('DOMContentLoaded', () => {
       form.querySelector('button[type="submit"]').disabled = true;
       result.textContent = 'Проверка...';
       try {
-        const res = await fetch('/api/admin-login', {
+        const res = await fetch(`${BASE_URL}/api/admin-login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ telegram, password }),
@@ -555,7 +558,7 @@ async function renderAdminProducts() {
   const container = document.getElementById('admin-products');
   if (!container) return;
   container.innerHTML = '<b>Загрузка...</b>';
-  const res = await fetch('/api/products');
+  const res = await fetch(`${BASE_URL}/api/products`);
   let products = await res.json();
   // Гарантируем, что у каждого товара есть _id
   products = products.filter(p => {
@@ -619,7 +622,7 @@ async function renderAdminProducts() {
       image: fd.get('image'),
       sizes: form.querySelectorAll('input[name="sizes"]:checked') ? Array.from(form.querySelectorAll('input[name="sizes"]:checked')).map(cb=>cb.value) : []
     };
-    await fetch('/api/products', {
+    await fetch(`${BASE_URL}/api/products`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
@@ -662,7 +665,7 @@ async function renderAdminProducts() {
         return;
       }
       if (!confirm('Удалить товар?')) return;
-      await fetch(`/api/products/${id}`, { method: 'DELETE' });
+      await fetch(`${BASE_URL}/api/products/${id}`, { method: 'DELETE' });
       await renderAdminProducts();
     };
   });
@@ -737,7 +740,7 @@ async function renderAdminOrders() {
   const user = getUser();
   const telegram = user?.telegram;
   const password = user?.password;
-  const res = await fetch('/api/orders', {
+  const res = await fetch(`${BASE_URL}/api/orders`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ telegram, password })
@@ -803,7 +806,7 @@ async function renderAdminOrders() {
     sel.onchange = async function() {
       const id = this.getAttribute('data-id');
       const newStatus = this.value;
-      await fetch(`/api/orders/${id}/status`, {
+      await fetch(`${BASE_URL}/api/orders/${id}/status`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus, telegram, password })
@@ -855,7 +858,7 @@ async function renderCatalog() {
   const catalog = document.querySelector('.catalog');
   if (!catalog) return;
   showCatalogSkeletons();
-  const res = await fetch('/api/products');
+  const res = await fetch(`${BASE_URL}/api/products`);
   let products = await res.json();
   products = products.map(p => ({ ...p, id: p._id || p.id }));
 
@@ -1019,7 +1022,7 @@ async function renderUserOrders() {
   const user = getUser();
   const container = document.getElementById('user-orders');
   if (!user || !container) return;
-  const res = await fetch('/api/orders', {
+  const res = await fetch(`${BASE_URL}/api/orders`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ id: user.id || user._id, telegram: user.telegram })
@@ -1123,7 +1126,7 @@ document.addEventListener('DOMContentLoaded', () => {
       forgotForm.querySelector('button[type="submit"]').disabled = true;
       forgotResult.textContent = 'Поиск...';
       try {
-        const res = await fetch('/api/forgot', {
+        const res = await fetch(`${BASE_URL}/api/forgot`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ value }),
@@ -1279,7 +1282,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);
     const id = params.get('id');
     if (id) {
-      fetch('/api/products').then(res=>res.json()).then(products=>{
+      fetch(`${BASE_URL}/api/products`).then(res=>res.json()).then(products=>{
         const product = products.find(p => String(p._id || p.id) === String(id));
         if (!product) return;
         let currentImg = 0;
@@ -1355,7 +1358,7 @@ async function renderProfile() {
   const user = getUser();
   if (!user) return;
   // Получаем свежий профиль из MongoDB
-  const res = await fetch('/api/profile', {
+  const res = await fetch(`${BASE_URL}/api/profile`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ id: user.id || user._id, telegram: user.telegram })
@@ -1412,7 +1415,7 @@ document.addEventListener('DOMContentLoaded', () => {
       fd.append('id', user.id || user._id);
       avatarResult.textContent = 'Загрузка...';
       try {
-        const res = await fetch('/api/profile/avatar', {
+        const res = await fetch(`${BASE_URL}/api/profile/avatar`, {
           method: 'POST',
           body: fd
         });
@@ -1444,7 +1447,7 @@ async function renderAdminOutOfStock() {
   }
   outDiv.style.display = '';
   outDiv.innerHTML = '<b>Загрузка...</b>';
-  const res = await fetch('/api/products');
+  const res = await fetch(`${BASE_URL}/api/products`);
   let products = await res.json();
   // Фильтруем товары, у которых ВСЕ размеры недоступны
   products = products.filter(p => Array.isArray(p.sizes) && p.sizes.length && p.sizes.every(s => s.available === false));
@@ -1501,7 +1504,7 @@ async function renderAdminOutOfStock() {
       const id = btn.getAttribute('data-id');
       if (!id) return;
       if (!confirm('Удалить товар?')) return;
-      await fetch(`/api/products/${id}`, { method: 'DELETE' });
+      await fetch(`${BASE_URL}/api/products/${id}`, { method: 'DELETE' });
       await renderAdminOutOfStock();
     };
   });
