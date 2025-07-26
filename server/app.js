@@ -428,6 +428,12 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../index.html'));
 });
 
+// Обработка всех остальных HTML файлов
+app.get('/*.html', (req, res) => {
+  const filePath = path.join(__dirname, '..', req.path);
+  res.sendFile(filePath);
+});
+
 // Переместить парсеры вниз
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

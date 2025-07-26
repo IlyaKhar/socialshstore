@@ -150,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         const sizes = product.sizes || [];
         document.querySelector('.product-detail').innerHTML = `
-          <img src="img/${product.image}" alt="${product.name}" style="max-width:300px;display:block;margin:0 auto 2rem;" />
+          <img src="/img/${product.image}" alt="${product.name}" style="max-width:300px;display:block;margin:0 auto 2rem;" />
           <h2>${product.name}</h2>
           <span class="price" style="font-size:1.5rem;">${product.price.toLocaleString()} ₽</span>
           <div style="margin:1.2rem 0 2rem 0;">
@@ -473,7 +473,7 @@ function renderCart() {
     div.className = 'cart-item';
     div.style = 'display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;background:#fafafa;padding:1.5rem 1rem;border-radius:1rem;box-shadow:0 2px 12px #0001;max-width:600px;margin-left:auto;margin-right:auto;';
     div.innerHTML = `
-      <img src="img/${item.image}" alt="${item.name}" style="width:70px;height:70px;object-fit:cover;border-radius:0.5rem;" />
+              <img src="/img/${item.image}" alt="${item.name}" style="width:70px;height:70px;object-fit:cover;border-radius:0.5rem;" />
       <div style="flex:1;">
         <b>${item.name}</b><br>
         <span class="price">${item.price.toLocaleString()} ₽</span><br>
@@ -1288,10 +1288,10 @@ document.addEventListener('DOMContentLoaded', () => {
         let currentImg = 0;
         const images = Array.isArray(product.images) && product.images.length ? product.images : [product.image];
         function showImg(idx) {
-          document.getElementById('product-img').src = 'img/' + images[idx];
+          document.getElementById('product-img').src = '/img/' + images[idx];
           document.getElementById('product-img').alt = product.name;
           document.getElementById('product-thumbs').innerHTML = images.map((img, i) =>
-            `<img src="img/${img}" alt="thumb" style="width:60px;height:60px;object-fit:cover;border-radius:0.5rem;cursor:pointer;box-shadow:0 1px 6px #0001;border:2.5px solid ${i===idx?'#181818':'#eee'};transition:border 0.2s;" data-idx="${i}">`
+            `<img src="/img/${img}" alt="thumb" style="width:60px;height:60px;object-fit:cover;border-radius:0.5rem;cursor:pointer;box-shadow:0 1px 6px #0001;border:2.5px solid ${i===idx?'#181818':'#eee'};transition:border 0.2s;" data-idx="${i}">`
           ).join('');
           document.querySelectorAll('#product-thumbs img').forEach(thumb => {
             thumb.onclick = () => { showImg(Number(thumb.dataset.idx)); };

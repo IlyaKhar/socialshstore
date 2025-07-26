@@ -4,14 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SocialSh Store — Главная</title>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="/styles.css" />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;500&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
-  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-  <link rel="shortcut icon" href="favicon.ico" />
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+  <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
   <meta name="apple-mobile-web-app-title" content="socialsh " />
-  <link rel="manifest" href="site.webmanifest" />
+  <link rel="manifest" href="/site.webmanifest" />
 </head>
 <body>
   <div id="toast" class="toast"></div>
@@ -81,7 +81,7 @@
       <svg viewBox="0 0 32 32" width="28" height="28" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="12" r="6"/><path d="M2 30c0-6.627 7.163-12 16-12s16 5.373 16 12"/></svg>
     </a>
   </div>
-  <script src="main.js"></script>
+  <script src="/main.js"></script>
   <script>
     // Новинки (3 товара)
     fetch('/api/products').then(r=>r.json()).then(products=>{
@@ -89,7 +89,7 @@
       if (!list) return;
       const items = products.slice(-3).map(p=>`
         <div class="product-card" style="background:#fafafa;box-shadow:0 2px 12px #0001;max-width:320px;min-width:220px;">
-          <img src="img/${p.image}" alt="${p.name}" style="width:180px;height:180px;object-fit:cover;border-radius:0.7rem;margin-bottom:1rem;background:#eee;" />
+          <img src="/img/${p.image}" alt="${p.name}" style="width:180px;height:180px;object-fit:cover;border-radius:0.7rem;margin-bottom:1rem;background:#eee;" />
           <h2 style="font-size:1.1rem;font-family:'Montserrat',sans-serif;color:#181818;margin:0.5rem 0 0.2rem 0;">${p.name}</h2>
           <span class="price" style="font-size:1.05rem;font-weight:bold;color:#222;">${p.price.toLocaleString()} ₽</span>
         </div>
