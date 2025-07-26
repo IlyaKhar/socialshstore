@@ -27,7 +27,7 @@ const express = require('express');
 const fs = require('fs');
 const app = express();
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, '../')));
 const TELEGRAM_BOT_TOKEN = '7824900331:AAHjSDlnNElq8hjbRyI6o6YLvN6F6HrXQ5c';
 const TELEGRAM_CHAT_ID = '7072395246';
 const https = require('https');
@@ -421,6 +421,11 @@ app.delete('/api/profile/address', async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: 'Ошибка удаления адреса' });
   }
+});
+
+// Раздача index.html по корню
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../index.html'));
 });
 
 // Переместить парсеры вниз
