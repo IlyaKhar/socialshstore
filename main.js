@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
         products.forEach(product => {
           const card = document.createElement('div');
           card.className = 'product-card';
-          const imgSrc = product.image ? `img/${product.image}` : 'https://via.placeholder.com/200x200?text=' + encodeURIComponent(product.name);
+          const imgSrc = product.image ? `Img/${product.image}` : 'https://via.placeholder.com/200x200?text=' + encodeURIComponent(product.name);
           let badgeHtml = '';
           if (product.badge === 'new') badgeHtml = `<span class='badge badge-new'>Новинка</span>`;
           if (product.badge === 'sale') badgeHtml = `<span class='badge badge-sale'>Скидка</span>`;
@@ -150,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         const sizes = product.sizes || [];
         document.querySelector('.product-detail').innerHTML = `
-          <img src="/img/${product.image}" alt="${product.name}" style="max-width:300px;display:block;margin:0 auto 2rem;" />
+          <img src="/Img/${product.image}" alt="${product.name}" style="max-width:300px;display:block;margin:0 auto 2rem;" />
           <h2>${product.name}</h2>
           <span class="price" style="font-size:1.5rem;">${product.price.toLocaleString()} ₽</span>
           <div style="margin:1.2rem 0 2rem 0;">
@@ -473,7 +473,7 @@ function renderCart() {
     div.className = 'cart-item';
     div.style = 'display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;background:#fafafa;padding:1.5rem 1rem;border-radius:1rem;box-shadow:0 2px 12px #0001;max-width:600px;margin-left:auto;margin-right:auto;';
     div.innerHTML = `
-              <img src="/img/${item.image}" alt="${item.name}" style="width:70px;height:70px;object-fit:cover;border-radius:0.5rem;" />
+              <img src="/Img/${item.image}" alt="${item.name}" style="width:70px;height:70px;object-fit:cover;border-radius:0.5rem;" />
       <div style="flex:1;">
         <b>${item.name}</b><br>
         <span class="price">${item.price.toLocaleString()} ₽</span><br>
@@ -575,7 +575,7 @@ async function renderAdminProducts() {
       <input type="text" name="name" placeholder="Название" required style="flex:1;min-width:120px;" />
       <input type="number" name="price" placeholder="Цена" required style="width:100px;" />
       <input type="text" name="description" placeholder="Описание" required style="flex:2;min-width:180px;" />
-      <input type="text" name="image" placeholder="Имя файла картинки (img/...)" required style="width:180px;" />
+                    <input type="text" name="image" placeholder="Имя файла картинки (Img/...)" required style="width:180px;" />
       <div style="display:flex;gap:0.7rem;align-items:center;">
         <span style="font-size:0.98rem;color:#888;">Размеры:</span>
         ${['S','M','L','XL'].map(size => `<label style='font-size:1.05rem;'><input type='checkbox' name='sizes' value='${size}' style='margin-right:0.3rem;'>${size}</label>`).join('')}
@@ -601,7 +601,7 @@ async function renderAdminProducts() {
       <td>${p.name}</td>
       <td>${p.price}</td>
       <td>${p.description}</td>
-      <td><img src="img/${p.image}" alt="${p.name}" style="width:50px;height:50px;object-fit:cover;border-radius:0.3rem;" /></td>
+      <td><img src="Img/${p.image}" alt="${p.name}" style="width:50px;height:50px;object-fit:cover;border-radius:0.3rem;" /></td>
       <td>${(p.sizes||[]).map(s=>`<span style='display:inline-block;padding:0.2em 0.7em;background:#181818;color:#fff;border-radius:0.5em;font-size:0.98em;margin:0 0.2em;'>${s}</span>`).join('')}</td>
       <td><button class="admin-edit" data-id="${realId}">✏️</button></td>
       <td><button class="admin-del" data-id="${realId}" style="color:#ff3b3b;">🗑️</button></td>
@@ -909,7 +909,7 @@ async function renderCatalog() {
   products.forEach(product => {
     const card = document.createElement('div');
     card.className = 'product-card';
-    const imgSrc = product.image ? `img/${product.image}` : 'https://via.placeholder.com/200x200?text=' + encodeURIComponent(product.name);
+    const imgSrc = product.image ? `Img/${product.image}` : 'https://via.placeholder.com/200x200?text=' + encodeURIComponent(product.name);
     let badgeHtml = '';
     if (product.badge === 'new') badgeHtml = `<span class='badge badge-new'>Новинка</span>`;
     if (product.badge === 'sale') badgeHtml = `<span class='badge badge-sale'>Скидка</span>`;
@@ -1288,10 +1288,10 @@ document.addEventListener('DOMContentLoaded', () => {
         let currentImg = 0;
         const images = Array.isArray(product.images) && product.images.length ? product.images : [product.image];
         function showImg(idx) {
-          document.getElementById('product-img').src = '/img/' + images[idx];
+          document.getElementById('product-img').src = '/Img/' + images[idx];
           document.getElementById('product-img').alt = product.name;
           document.getElementById('product-thumbs').innerHTML = images.map((img, i) =>
-            `<img src="/img/${img}" alt="thumb" style="width:60px;height:60px;object-fit:cover;border-radius:0.5rem;cursor:pointer;box-shadow:0 1px 6px #0001;border:2.5px solid ${i===idx?'#181818':'#eee'};transition:border 0.2s;" data-idx="${i}">`
+            `<img src="/Img/${img}" alt="thumb" style="width:60px;height:60px;object-fit:cover;border-radius:0.5rem;cursor:pointer;box-shadow:0 1px 6px #0001;border:2.5px solid ${i===idx?'#181818':'#eee'};transition:border 0.2s;" data-idx="${i}">`
           ).join('');
           document.querySelectorAll('#product-thumbs img').forEach(thumb => {
             thumb.onclick = () => { showImg(Number(thumb.dataset.idx)); };
@@ -1466,7 +1466,7 @@ async function renderAdminOutOfStock() {
       <td>${p.name}</td>
       <td>${p.price}</td>
       <td>${p.description}</td>
-      <td><img src="img/${p.image}" alt="${p.name}" style="width:50px;height:50px;object-fit:cover;border-radius:0.3rem;" /></td>
+      <td><img src="Img/${p.image}" alt="${p.name}" style="width:50px;height:50px;object-fit:cover;border-radius:0.3rem;" /></td>
       <td>${(p.sizes||[]).map(s=>`<span style='display:inline-block;padding:0.2em 0.7em;background:${s.available ? '#181818' : '#bbb'};color:#fff;border-radius:0.5em;font-size:0.98em;margin:0 0.2em;'>${s.size}</span>`).join('')}</td>
       <td><button class="admin-edit" data-id="${realId}">✏️</button></td>
       <td><button class="admin-del" data-id="${realId}" style="color:#ff3b3b;">🗑️</button></td>
